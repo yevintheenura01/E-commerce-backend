@@ -4,17 +4,17 @@ const options = {
   definition: {
     openapi: "3.0.3",
     info: {
-      title: "Payment Service API",
+      title: "Product Service API",
       version: "1.0.0",
       description:
-        "E-commerce Payment Service - Handles payment processing and transactions",
+        "E-commerce Product Service - Manages product catalog and inventory",
       contact: {
         name: "E-commerce Team",
       },
     },
     servers: [
       {
-        url: "http://localhost:4002",
+        url: "http://localhost:4004",
         description: "Development server",
       },
       {
@@ -24,21 +24,15 @@ const options = {
     ],
     components: {
       schemas: {
-        Payment: {
+        Product: {
           type: "object",
           properties: {
             _id: { type: "string" },
-            orderId: { type: "string" },
-            userId: { type: "string" },
-            amount: { type: "number" },
-            status: {
-              type: "string",
-              enum: ["pending", "completed", "failed"],
-            },
-            method: {
-              type: "string",
-              enum: ["credit_card", "debit_card", "paypal"],
-            },
+            name: { type: "string" },
+            description: { type: "string" },
+            price: { type: "number" },
+            stock: { type: "integer" },
+            category: { type: "string" },
             createdAt: { type: "string", format: "date-time" },
           },
         },

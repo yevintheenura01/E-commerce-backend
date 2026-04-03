@@ -4,17 +4,17 @@ const options = {
   definition: {
     openapi: "3.0.3",
     info: {
-      title: "Payment Service API",
+      title: "Order Service API",
       version: "1.0.0",
       description:
-        "E-commerce Payment Service - Handles payment processing and transactions",
+        "E-commerce Order Service - Manages orders (Create, Read, Update, Delete)",
       contact: {
         name: "E-commerce Team",
       },
     },
     servers: [
       {
-        url: "http://localhost:4002",
+        url: "http://localhost:4003",
         description: "Development server",
       },
       {
@@ -24,22 +24,33 @@ const options = {
     ],
     components: {
       schemas: {
-        Payment: {
+        OrderItem: {
+          type: "object",
+          properties: {
+            productId: { type: "string" },
+            name: { type: "string" },
+            quantity: { type: "integer", minimum: 1 },
+            price: { type: "number", minimum: 0 },
+          },
+          required: ["productId", "name", "quantity", "price"],
+        },
+        Order: {
           type: "object",
           properties: {
             _id: { type: "string" },
-            orderId: { type: "string" },
             userId: { type: "string" },
-            amount: { type: "number" },
+            items: {
+              type: "array",
+              items: { $ref: "#/components/schemas/OrderItem" },
+            },
+            shippingAddress: { type: "string" },
+            totalAmount: { type: "number" },
             status: {
               type: "string",
-              enum: ["pending", "completed", "failed"],
-            },
-            method: {
-              type: "string",
-              enum: ["credit_card", "debit_card", "paypal"],
+              enum: ["pending", "paid", "shipped", "completed", "cancelled"],
             },
             createdAt: { type: "string", format: "date-time" },
+            updatedAt: { type: "string", format: "date-time" },
           },
         },
         Error: {
@@ -52,7 +63,7 @@ const options = {
       },
     },
   },
-  apis: ["./src/routes/*.js"],
+  apis: ["./src/routes/orderRoutes.js"],
 };
 
 const specs = swaggerJsdoc(options);
